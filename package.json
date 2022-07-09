@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "express": "^4.18.1",
+    "socket.io": "^4.5.1"
+  },
+  "name": "deploy",
+  "version": "1.0.0",
+  "description": "This is the nodeserver",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pritam Chatterjee",
+  "license": "ISC"
+}

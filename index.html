@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>i-Chat app</title>
+        <mata charset="UTF-8">
+        <script src="/socket.io/socket.io.js"></script>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            .logo{
+        display:block;
+        margin:auto;
+        width:50px;
+        height:50px;
+        }
+        h1{
+        margin-top:12px;
+        font-size:30px;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align:center;
+        }
+        body{
+        background-image: linear-gradient(rgb(92,100,221),rgb(70, 224, 40));
+        height:100vh;
+        }
+        .container{
+        max-width:955px;
+        border:2px solid black;
+        margin:auto;
+        height:60vh;
+        padding:33px;
+        overflow-y:scroll;
+        margin-bottom:23px;
+        border-radius:13px;
+        background-image:url("background.jpg");
+        background-repeat:no-repeat;
+        background-attachment:scroll;
+        min-height: 60vhpx;
+        }
+        .message{
+        width:40%;
+        padding:10px;
+        margin:17px 12px;
+        border:2px black;
+        border-radius:10px;
+        box-shadow: 5px 5px 4px 5px #888888;
+        }
+        .left{
+        background-color:rgb(7, 252, 219);
+        float: left;
+        clear:both;
+        font-weight: bold;
+        font-style: oblique;
+        
+        }
+        .right{
+        background-color:rgb(196, 249, 242);
+        float: right;
+        clear:both;
+        font-style: oblique;
+        }
+        #send-container{
+        display: block;
+        margin:auto;
+        text-align: center;
+        max-width:1031px;
+        width:100%;
+        display: flex;
+        justify-content:center;
+        align-items:center;
+        }
+        #messageInp{
+        width:80%;
+        border:2px solid black;
+        border-radius:6px;
+        height:34px;
+        font-size: 17px;
+        }
+        .btn{
+        cursor: pointer;
+        border:2px solid black;
+        border-radius:6px;
+        height:34px ;
+        width:9%;
+        margin:0px 5px;
+        background-color: rgb(49, 240, 103);
+        color:aliceblue;
+        font-size:medium;
+        }
+        .btn:hover{
+        height:38px ;
+        width:11%;
+        }
+        </style>
+   </head>
+   <body>
+       <nav>
+           <img class="logo" src="/chat.jpg" alt="chat">
+           <h1>Welcome to iChat App</h1>
+       </nav>
+       <div class="container">
+           
+       </div>
+       <div class="send">
+           <form action="#" id="send-container">
+               <input type="text" name="messageInp" id="messageInp">
+               <button class="btn" type="submit"><b>send</b></button>
+           </form>
+       </div>
+   </body>
+</html>
+<script>
+    const socket = io ();
+const form=document.getElementById('send-container');
+const messageInput=document.getElementById('messageInp');
+const messageContainer=document.querySelector(".container");
+var audio=new Audio('Notification.mp3');
+const append=(message,position)=>{
+const messageElement=document.createElement('div');
+messageElement.innerText=message;
+messageElement.classList.add('message');
+messageElement.classList.add(position);
+messageContainer.append(messageElement);
+if(position=='left')
+{
+audio.play();
+}
+}
+form.addEventListener('submit', function(e){
+e.preventDefault();
+const message=messageInput.value;
+append(`You: ${message}`,'right')
+socket.emit('send',message);
+messageInput.value='';
+})
+const name=prompt("Enter your name:");
+socket.emit('new-user-joined',name);
+socket.on('user-joined',data=>{
+append(`${data} joined the chat`,'left');
+})
+socket.on('receive',data=>{
+append(`${data.name}:${data.message}`,'left');
+})
+socket.on('left',name =>{
+append(`${name} left the chat`,'left');
+})
+</script>
