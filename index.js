@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
   });
 server.listen(port, () => {
-  console.log(`Socket.IO server running at ${port}`);
+  console.log(`Socket.IO server running at port ${port}`);
 });
 const users={};
 io.on('connection', socket =>{
